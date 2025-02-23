@@ -1,5 +1,10 @@
 package api
 
 type Client interface {
-	Request(Request) (Response, error)
+	Post(Request) ClientError
+}
+
+type ClientError interface {
+	Error() string
+	StatusCode() int
 }
