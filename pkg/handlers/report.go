@@ -13,29 +13,29 @@ type Report struct {
 	Client api.Client
 }
 
-func (th Report) Handle(w http.ResponseWriter, r *http.Request) {
+func (rh Report) Handle(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
-		th.Post(w, r)
+		rh.Post(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
-func (th Report) Post(w http.ResponseWriter, r *http.Request) {
+func (rh Report) Post(w http.ResponseWriter, r *http.Request) {
 	headerContentType := r.Header.Get("Content-Type")
-	if headerContentType != "applicaiton/json" {
+	if headerContentType != string(applicationJson) {
 		http.Error(
 			w,
 			fmt.Sprint("%s Content-Type is not allowed", headerContentType),
-			http.StatusUnsupportedMediaType,
+		http.StatusUnsupportedMediaType,
 		)
 		return
 	}
-	var t api.Transaction
+	var reportRequest api.ReportRequest
 	var unmarshalErr *json.UnmarshalTypeError
 	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&t)
+	err := decoder.Decode(&reportRequest)
 	if err != nil {
 		if errors.As(err, *unmarshalErr) {
 			http.Error(w, "Bad Request. Wrong type provided for field "+unmarshalErr.Field, http.StatusBadRequest)
@@ -44,5 +44,15 @@ func (th Report) Post(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	
+	report, clientErr := rh.Client.Post(reportRequest)
+	if err != nil {
+		http.Error(w, "Request failed. Reason: "+clientErr.Error(), clientErr.StatusCode())
+		return
+	}
+	out, err := json.Marshal(report)
+	if err != nil {
+		http.Error(w, "Request failed. Reason: "+err.Error(), http.StatusServiceUnavailable)
+	}
+	w.Header().Set(string(contentType), string(applicationJson))
+	w.Write(out)
 }
