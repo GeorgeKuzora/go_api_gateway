@@ -28,7 +28,7 @@ func (rh Report) Post(w http.ResponseWriter, r *http.Request) {
 		http.Error(
 			w,
 			fmt.Sprint("%s Content-Type is not allowed", headerContentType),
-		http.StatusUnsupportedMediaType,
+			http.StatusUnsupportedMediaType,
 		)
 		return
 	}
