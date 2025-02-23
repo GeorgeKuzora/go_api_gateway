@@ -1,7 +1,13 @@
 package handlers
 
-type contentType string
+type Header string
 
 const (
-	applicationJson = "applicaiton/json" 
+	contentType Header = "Content-Type"
+)
+
+type ContentType string
+
+const ( 
+	applicationJson ContentType = "application/json" 
 )

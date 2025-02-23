@@ -24,7 +24,7 @@ func (t Transaction) Handle(w http.ResponseWriter, r *http.Request) {
 
 func (t Transaction) Post(w http.ResponseWriter, r *http.Request) {
 	headerContentType := r.Header.Get("Content-Type")
-	if headerContentType != applicationJson {
+	if headerContentType != string(applicationJson) {
 		http.Error(
 			w,
 			fmt.Sprint("%s Content-Type is not allowed", headerContentType),
@@ -44,7 +44,7 @@ func (t Transaction) Post(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	clientErr := t.Client.Post(transactionData)
+	_, clientErr := t.Client.Post(transactionData)
 	if err != nil {
 		http.Error(w, "Request failed. Reason: "+clientErr.Error(), clientErr.StatusCode())
 		return

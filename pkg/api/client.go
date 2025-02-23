@@ -1,7 +1,7 @@
 package api
 
 type Client interface {
-	Post(Request) ClientError
+	Post(Request) (Response, ClientError)
 }
 
 type ClientError interface {
