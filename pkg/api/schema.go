@@ -36,3 +36,7 @@ type Report struct {
 	End time.Time `json:"end"`
 	Transactions []Transaction `json:"transactions"`
 }
+
+type Request interface {}
+
+type Response interface {}

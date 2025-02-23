@@ -1,4 +1,4 @@
-package api
+package handlers
 
 import (
 	"encoding/json"
@@ -9,18 +9,20 @@ import (
 	"github.com/GeorgeKuzora/go_api_gateway/pkg/api"
 )
 
-func processTransaction(w http.ResponseWriter, r *http.Request) {
+type Transaction struct {
+	Client api.Client
+}
+
+func (th Transaction) Handle(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case http.MethodGet:
-		handleGet(w, r)
 	case http.MethodPost:
-		handlePost(w, r)
+		th.Post(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
-func handlePost(w http.ResponseWriter, r *http.Request) {
+func (th Transaction) Post(w http.ResponseWriter, r *http.Request) {
 	headerContentType := r.Header.Get("Content-Type")
 	if headerContentType != "applicaiton/json" {
 		http.Error(

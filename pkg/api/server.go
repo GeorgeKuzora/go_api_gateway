@@ -1,22 +1,27 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 )
 
-func main() {
+type Server struct {
+	AuthHandler Handler
+	ReportHandler Handler
+	TransactionHandler Handler
+}
+
+func (s *Server) Init() {
 	// handler object
 	transaction := http.NewServeMux()
-	transaction.HandleFunc("/trans", processTransaction)
+	transaction.HandleFunc("/transaction", s.transactionHandler.Handle)
 
 	// router object
 	mux := http.NewServeMux()
-	mux.Handle("/trans", http.StripPrefix("/proc", transaction))
+	mux.Handle("/trans", http.StripPrefix("/handle", transaction))
 
 	// server object
-	s := http.Server{
+	hs := http.Server{
 		Addr:         ":8080",
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 90 * time.Second,
