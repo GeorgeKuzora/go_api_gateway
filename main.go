@@ -17,9 +17,10 @@ func main() {
 		Client: clients.Transaction{},
 	}
 	s := api.Server{
-		AuthHandler: ah,
-		ReportHandler: rh,
+		AuthHandler:        ah,
+		ReportHandler:      rh,
 		TransactionHandler: th,
 	}
 	s.Init()
 }
+

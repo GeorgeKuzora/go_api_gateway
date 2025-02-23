@@ -14,7 +14,7 @@ type Server struct {
 func (s *Server) Init() {
 	// handler object
 	transaction := http.NewServeMux()
-	transaction.HandleFunc("/transaction", s.transactionHandler.Handle)
+	transaction.HandleFunc("/transaction", s.TransactionHandler.Handle)
 
 	// router object
 	mux := http.NewServeMux()
