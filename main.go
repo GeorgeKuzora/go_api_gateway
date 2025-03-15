@@ -2,12 +2,11 @@ package main
 
 import (
 	"github.com/GeorgeKuzora/go_api_gateway/pkg/api"
-	"github.com/GeorgeKuzora/go_api_gateway/pkg/clients"
-	handlers "github.com/GeorgeKuzora/go_api_gateway/pkg/handlers"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func main() {
-	ah := handlers.Auth{
+	ah := handlers.Register{
 		Client: clients.Auth{},
 	}
 	rh := handlers.Report{

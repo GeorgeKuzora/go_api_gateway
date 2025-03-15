@@ -1,4 +1,4 @@
-package handlers
+package api
 
 type Header string
 
