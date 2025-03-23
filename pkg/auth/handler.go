@@ -112,3 +112,28 @@ func (l Login) Post(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(encodedToken)
 }
+
+type Verify struct {
+	Client Client
+	Url string
+}
+
+func (v Verify) Handle(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+		case http.MethodPost:
+			v.Post(w, r)
+		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+}
+
+func (v Verify) Post(w http.ResponseWriter, r *http.Request) {
+	headerContentType := r.Header.Get("Content-Type")
+	if headerContentType != "multipart/form-data" {
+		http.Error(
+			w,
+			fmt.Sprintf("%s Content-Type is not allowed", headerContentType),
+			http.StatusUnsupportedMediaType,
+		)
+	}
+}
